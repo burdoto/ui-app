@@ -1,41 +1,51 @@
 package de.kaleidox.app.ui.model;
 
 import java.awt.Graphics;
+import java.util.function.Consumer;
 
-import static de.kaleidox.app.math.GeometryHelper2D.X_COORD;
-import static de.kaleidox.app.math.GeometryHelper2D.Y_COORD;
+import de.kaleidox.app.ui.shape.ShapeConfig;
+import de.kaleidox.app.ui.shape.ShapeType;
+
+import static de.kaleidox.app.ui.shape.ShapeConfig.X;
+import static de.kaleidox.app.ui.shape.ShapeConfig.Y;
 
 public class CanvasShape {
     private final ShapeType shapeType;
-    private final int[] args;
+    private final ShapeConfig config;
     
     private int z = 0;
 
-    public CanvasShape(ShapeType shapeType, int[] args) {
+    public CanvasShape(ShapeType shapeType, Consumer<ShapeConfig> configurator) {
         this.shapeType = shapeType;
-        this.args = args;
+        this.config = new ShapeConfig();
+        
+        configurator.accept(this.config);
     }
 
     public void apply(Graphics graphics) {
-        shapeType.apply(graphics, args);
+        shapeType.apply(graphics, config);
+    }
+
+    public ShapeConfig getShapeDim() {
+        return config;
     }
 
     public int getX() {
-        return args[X_COORD];
+        return config.getPos()[X];
     }
     
     public CanvasShape setX(int x) {
-        this.args[X_COORD] = x;
+        this.config.getPos()[X] = x;
         
         return this;
     }
     
     public int getY() {
-        return args[Y_COORD];
+        return config.getPos()[Y];
     }
     
     public CanvasShape setY(int y) {
-        this.args[Y_COORD] = y;
+        this.config.getPos()[Y] = y;
         
         return this;
     }
@@ -50,7 +60,7 @@ public class CanvasShape {
         return this;
     }
 
-    public static CanvasShape simple(ShapeType shapeType, int[] args) {
-        return new CanvasShape(shapeType, args);
+    public static CanvasShape simple(ShapeType shapeType, Consumer<ShapeConfig> configurator) {
+        return new CanvasShape(shapeType, configurator);
     }
 }

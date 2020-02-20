@@ -4,7 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import de.kaleidox.app.ui.EditorCanvas;
-import de.kaleidox.app.ui.model.ShapeType;
+import de.kaleidox.app.ui.shape.ShapeType;
 
 public enum App implements Runnable {
     INSTANCE;
@@ -29,7 +29,9 @@ public enum App implements Runnable {
                 new int[]{20, 20, 80, 30},
                 new int[]{20, 120, 80, 30}
         }) {
-            canvas.addShape(ShapeType.RECTANGLE, rect[0], rect[1], rect[2], rect[3]);
+            canvas.addShape(ShapeType.RECTANGLE, config -> config
+                    .at(rect[0], rect[1])
+                    .dim(rect[2], rect[3]));
         }
 
         frame.pack();
